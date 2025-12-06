@@ -90,6 +90,7 @@ export const codeAgentFunction = inngest.createFunction(
                     await sandbox.files.write(file.path, file.content);
                     updatedFiles[file.path] = file.content;
                   }
+                  return updatedFiles;
                 } catch (e) {
                   return "Error: " + e;
                 }
@@ -158,7 +159,7 @@ export const codeAgentFunction = inngest.createFunction(
     const result = await network.run(event.data.value);
 
     const isError =
-      !result.state.data.summary ||
+      !result.state.data.summary &&
       Object.keys(result.state.data.files || {}).length === 0;
 
     const sandboxUrl = await step.run("get-sandbox-url", async () => {
@@ -171,6 +172,7 @@ export const codeAgentFunction = inngest.createFunction(
       if (isError) {
         return await prisma.message.create({
           data: {
+            projectId: event.data.projectId,
             content: "Something went worng. Please try again.",
             role: "ASSISTANT",
             type: "Error",
@@ -179,6 +181,7 @@ export const codeAgentFunction = inngest.createFunction(
       }
       return await prisma.message.create({
         data: {
+          projectId: event.data.projectId,
           content: result.state.data.summary,
           role: "ASSISTANT",
           type: "Result",
