@@ -35,13 +35,14 @@ export const ProjectsList = () => {
         {projects?.map((project) => (
           <Button
             key={project.id}
+            asChild
             variant="outline"
             className="font-normal h-auto justify-start w-full text-start p-4"
           >
             <Link href={`/projects/${project.id}`}>
               <div className="flex items-center gap-x-4">
                 <Image
-                  src="./logo.svg"
+                  src="/logo.svg"
                   alt="Vibe"
                   width={32}
                   height={32}
