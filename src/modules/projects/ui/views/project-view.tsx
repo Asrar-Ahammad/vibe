@@ -33,10 +33,10 @@ export const ProjectView = ({ projectId }: Props) => {
           minSize={20}
           className="flex flex-col min-h-0"
         >
-          <Suspense fallback={<p>Loading Project...</p>}>
+          <Suspense fallback={<p className="animate-pulse m-4 font-semibold text-left">Loading Project Name...</p>}>
             <ProjectHeader projectId={projectId} />
           </Suspense>
-          <Suspense fallback={<p>Loading Messages...</p>}>
+          <Suspense fallback={<p className="animate-pulse font-semibold m-4 text-left">Loading Messages...</p>}>
             <MessagesContainer 
             projectId={projectId} 
             activeFragment={activeFragment}
@@ -64,7 +64,7 @@ export const ProjectView = ({ projectId }: Props) => {
                 </TabsTrigger>
               </TabsList>
               <div className="ml-auto flex items-center gap-x-2">
-                <Button asChild size="sm" variant="default">
+                <Button asChild size="sm" variant="teritiary">
                   <Link href="/pricing">
                     <CrownIcon/> Upgrade
                   </Link>
