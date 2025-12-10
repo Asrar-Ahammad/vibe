@@ -17,7 +17,7 @@ export const ProjectsList = () => {
       <div className="w-full bg-white dark:bg-sidebar rounded-xl p-8 border flex flex-col gap-y-6 sm:gap-y-4">
         <h2 className="text-2xl font-semibold">Saved Vibes</h2>
         <div className="flex items-center justify-center h-32">
-          <p className="text-sm text-muted-foreground">Loading...</p>
+          <p className="text-lg font-semibold text-muted-foreground animate-pulse">Loading...</p>
         </div>
       </div>
     );
