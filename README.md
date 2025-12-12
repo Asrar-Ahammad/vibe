@@ -73,8 +73,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 3.  AI agents, powered by models like OpenAI, Anthropic, or Grok, generate the code.
 4.  The generated code is executed in a secure cloud sandbox using E2B and Docker.
 5.  The user gets a live preview of the application with a public URL.
-6.  The code is committed to a Git repository, and a pull request is created.
-7.  CodeRabbit performs an AI-powered code review on the pull request.
 
 ## Contributing
 
