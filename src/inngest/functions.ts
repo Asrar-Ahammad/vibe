@@ -14,6 +14,7 @@ import { getSandbox, lastAssistantTextMessageContent, parseAgentOutput } from ".
 import z from "zod";
 import { FRAGMENT_TITLE_PROMPT, PROMPT, RESPONSE_PROMPT } from "@/prompt";
 import { prisma } from "@/lib/db";
+import { SANDBOX_TIMEOUT } from "./types";
 
 interface AgentState {
   summary: string;
@@ -26,6 +27,7 @@ export const codeAgentFunction = inngest.createFunction(
   async ({ event, step }) => {
     const sandboxId = await step.run("get-sandbox-id", async () => {
       const sandbox = await Sandbox.create("vibe-nextjs-asrar-ahammad-2");
+      await sandbox.setTimeout(SANDBOX_TIMEOUT);
       return sandbox.sandboxId;
     });
 
@@ -41,6 +43,7 @@ export const codeAgentFunction = inngest.createFunction(
           orderBy: {
             createrAt: "desc", // TODO: Change to ascending if AI does not understand what is the latest message.
           },
+          take:5,
         });
         for (const message of messages) {
           formattedMessages.push({
@@ -50,7 +53,7 @@ export const codeAgentFunction = inngest.createFunction(
           });
         }
 
-        return formattedMessages;
+        return formattedMessages.reverse();
       }
     );
 
@@ -241,7 +244,7 @@ export const codeAgentFunction = inngest.createFunction(
         return await prisma.message.create({
           data: {
             projectId: event.data.projectId,
-            content: "Something went worng. Please try again.",
+            content: "Something went wrong. Please try again.",
             role: "ASSISTANT",
             type: "Error",
           },

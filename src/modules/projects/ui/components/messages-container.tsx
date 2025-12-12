@@ -26,8 +26,7 @@ export const MessagesContainer = ({
         projectId: projectId,
       },
       {
-        // TODO: Temperory live message update.
-        refetchInterval: 5000,
+        refetchInterval: 2000,
       }
     )
   );

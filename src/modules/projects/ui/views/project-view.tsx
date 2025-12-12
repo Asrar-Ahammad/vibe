@@ -18,6 +18,7 @@ import Link from "next/link";
 import { FileExplorer } from "@/components/file-explorer";
 import { UserControl } from "@/components/user-control";
 import { useAuth } from "@clerk/nextjs";
+import { ErrorBoundary } from "react-error-boundary";
 
 interface Props {
   projectId: string;
@@ -27,8 +28,8 @@ export const ProjectView = ({ projectId }: Props) => {
   const { has } = useAuth();
   const hasProAccess = has?.({ plan: "pro" });
 
-  const [activeFragment, setActiveFragment] = useState<Fragment | null>(null)
-  const [tabState, setTabState] = useState<"preview" | "code">("preview")
+  const [activeFragment, setActiveFragment] = useState<Fragment | null>(null);
+  const [tabState, setTabState] = useState<"preview" | "code">("preview");
   return (
     <div className="h-screen">
       <ResizablePanelGroup direction="horizontal">
@@ -37,16 +38,32 @@ export const ProjectView = ({ projectId }: Props) => {
           minSize={20}
           className="flex flex-col min-h-0"
         >
-          <Suspense fallback={<p className="animate-pulse m-4 font-semibold text-left">Loading Project Name...</p>}>
-            <ProjectHeader projectId={projectId} />
-          </Suspense>
-          <Suspense fallback={<p className="animate-pulse font-semibold m-4 text-left">Loading Messages...</p>}>
-            <MessagesContainer 
-            projectId={projectId} 
-            activeFragment={activeFragment}
-            setActiveFragment={setActiveFragment}
-            />
-          </Suspense>
+          <ErrorBoundary fallback={<p>Project header error</p>}>
+            <Suspense
+              fallback={
+                <p className="animate-pulse m-4 font-semibold text-left">
+                  Loading Project Name...
+                </p>
+              }
+            >
+              <ProjectHeader projectId={projectId} />
+            </Suspense>
+          </ErrorBoundary>
+          <ErrorBoundary fallback={<p>Messages container error</p>}>
+            <Suspense
+              fallback={
+                <p className="animate-pulse font-semibold m-4 text-left">
+                  Loading Messages...
+                </p>
+              }
+            >
+              <MessagesContainer
+                projectId={projectId}
+                activeFragment={activeFragment}
+                setActiveFragment={setActiveFragment}
+              />
+            </Suspense>
+          </ErrorBoundary>
         </ResizablePanel>
 
         <ResizableHandle className="hover:bg-primary transition-colors" />
@@ -69,17 +86,17 @@ export const ProjectView = ({ projectId }: Props) => {
               </TabsList>
               <div className="ml-auto flex items-center gap-x-2">
                 {!hasProAccess && (
-                <Button asChild size="sm" variant="teritiary">
-                  <Link href="/pricing">
-                    <CrownIcon/> Upgrade
-                  </Link>
-                </Button>
+                  <Button asChild size="sm" variant="teritiary">
+                    <Link href="/pricing">
+                      <CrownIcon /> Upgrade
+                    </Link>
+                  </Button>
                 )}
                 <UserControl />
               </div>
             </div>
             <TabsContent value="preview">
-            {!!activeFragment && <FragmentWeb data={activeFragment} />}
+              {!!activeFragment && <FragmentWeb data={activeFragment} />}
             </TabsContent>
             <TabsContent value="code" className="min-h-0">
               {!!activeFragment?.files && (
