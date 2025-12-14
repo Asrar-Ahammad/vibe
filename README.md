@@ -34,7 +34,7 @@ Vibe is a web application that allows you to create projects and interact with a
 ### Prerequisites
 
 -   [Node.js](https://nodejs.org/en/) (v20 or higher)
--   [pnpm](https://pnpm.io/)
+-   [npm](https://www.npmjs.com/)
 -   [PostgreSQL](https://www.postgresql.org/)
 
 ### Installation
